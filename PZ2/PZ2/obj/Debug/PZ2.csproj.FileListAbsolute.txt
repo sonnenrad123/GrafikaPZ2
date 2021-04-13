@@ -1,0 +1,15 @@
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\MainWindow.g.cs
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\App.g.cs
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2_MarkupCompile.cache
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2_MarkupCompile.lref
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\bin\Debug\PZ2.exe.config
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\bin\Debug\PZ2.exe
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\bin\Debug\PZ2.pdb
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\MainWindow.baml
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.g.resources
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.Properties.Resources.resources
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.csproj.GenerateResource.cache
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.csproj.CoreCompileInputs.cache
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.exe
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.pdb
+D:\Projekti2020-2021\GrafikaPZ2\PZ2\PZ2\obj\Debug\PZ2.csprojAssemblyReference.cache
