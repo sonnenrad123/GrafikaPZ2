@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PZ2.Models
 {
-    class Point
+    public class Point
     {
         public Point()
         {

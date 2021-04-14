@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PZ2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="960" Width="1280">
+    <DockPanel>
+        <Canvas DockPanel.Dock="Bottom" Height="100">
+            <Label x:Name="Substation" Content="Substation - " Canvas.Left="10" Height="23" Width="78" Canvas.Top="2"/>
+            <Label x:Name="Switch" Content="Switch - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="21"/>
+            <Label x:Name="Node" Content="Node - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="41"/>
+            <Label x:Name="Line" Content="Line - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="64"/>
+            <Ellipse Fill="Yellow" Height="11" Canvas.Left="81" Stroke="Black" Canvas.Top="11" Width="12" RenderTransformOrigin="0.5,0.5">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.04"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse Fill="Red" Height="11" Canvas.Left="59" Stroke="Black" Canvas.Top="30" Width="12" RenderTransformOrigin="0.194,0.606">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.04"/>
+                        <TranslateTransform X="0.001" Y="0.001"/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Ellipse Fill="Blue" Height="11" Canvas.Left="54" Stroke="Black" Canvas.Top="50" Width="12" RenderTransformOrigin="0.5,0.5">
+                <Ellipse.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.04"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+            <Rectangle Fill="Black" Height="2" Canvas.Left="47" Stroke="Black" Width="21" Canvas.Top="78"/>
+
+        </Canvas>
+        <Slider x:Name="slider" Minimum=".1" Maximum="10" Value="1" DockPanel.Dock="Top"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Canvas Width="4000" Height="4000"  Name="GridCanvas">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleX="{Binding ElementName=slider, Path=Value}"
+                                ScaleY="{Binding ElementName=slider, Path=Value}"/>
+                    </Canvas.LayoutTransform>
+
+                </Canvas>
+            </Border>
+        </ScrollViewer>
+    </DockPanel>
 </Window>
