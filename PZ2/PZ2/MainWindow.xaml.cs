@@ -29,14 +29,11 @@ namespace PZ2
             mainImportDraw.LoadAndParseXML();
             mainImportDraw.ScaleFromLatLonToCanvas(GridCanvas.Width,GridCanvas.Height);
             mainImportDraw.ConvertFromLatLonToCanvasCoord();
-            mainImportDraw.DrawElements(this.GridCanvas,DrawingElementMouseDown);
+            mainImportDraw.DrawElements(this.GridCanvas);
             
         }
 
 
-        public void DrawingElementMouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+        
     }
 }

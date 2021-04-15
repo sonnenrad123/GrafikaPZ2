@@ -68,7 +68,7 @@ namespace PZ2
 
                 foreach(LineEntity templine in ret)
                 {
-                    if(templine.FirstEnd == line.SecondEnd && templine.SecondEnd == line.FirstEnd)
+                    if((templine.FirstEnd == line.SecondEnd && templine.SecondEnd == line.FirstEnd) || (templine.FirstEnd == line.FirstEnd && templine.SecondEnd == line.SecondEnd))
                     {
                         postoji_dupla_suprotni_smer = true;
                     }
@@ -305,23 +305,22 @@ namespace PZ2
             return false;
         }
 
-        public void DrawElements(Canvas drawingCanvas, MouseButtonEventHandler e)
+        public void DrawElements(Canvas drawingCanvas)
         {
-            DrawSubstations(drawingCanvas, e);
-            DrawNodes(drawingCanvas, e);
-            DrawSwitches(drawingCanvas, e);
-            DrawLines(drawingCanvas, e);
+            DrawSubstations(drawingCanvas);
+            DrawNodes(drawingCanvas);
+            DrawSwitches(drawingCanvas);
+            DrawLines(drawingCanvas);
             DrawCrossMarks(drawingCanvas);
         }
 
 
-        public void DrawSubstations(Canvas drawingCanvas, MouseButtonEventHandler e)
+        public void DrawSubstations(Canvas drawingCanvas)
         {
             foreach(SubstationEntity ent in substations)
             {
                 Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Green };
                 shape.ToolTip = "Substation: \n" + "ID:" + ent.Id + "\nName: " + ent.Name;
-                shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
@@ -331,13 +330,12 @@ namespace PZ2
             }
         }
 
-        public void DrawNodes(Canvas drawingCanvas, MouseButtonEventHandler e)
+        public void DrawNodes(Canvas drawingCanvas)
         {
             foreach (NodeEntity ent in nodes)
             {
                 Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Blue };
                 shape.ToolTip = "Node: \n" + "ID:" + ent.Id + "\nName: " + ent.Name;
-                shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
@@ -347,13 +345,12 @@ namespace PZ2
             }
         }
 
-        public void DrawSwitches(Canvas drawingCanvas, MouseButtonEventHandler e)
+        public void DrawSwitches(Canvas drawingCanvas)
         {
             foreach (SwitchEntity ent in switches)
             {
                 Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Red };
                 shape.ToolTip = "Switch: \n" + "ID:" + ent.Id + "\nName: " + ent.Name + "\nStatus: "+ent.Status;
-                shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
@@ -363,7 +360,7 @@ namespace PZ2
             }
         }
 
-        public void DrawLines(Canvas drawingCanvas, MouseButtonEventHandler e)
+        public void DrawLines(Canvas drawingCanvas)
         {
             foreach(LineEntity ent in lines)
             {
@@ -429,44 +426,44 @@ namespace PZ2
                     lineBlocks = drawingGrid.createLineUsingBFS(x1, y1, x2, y2, true);
                 }
 
-                if(Math.Abs(x1-x2) < 4800 || Math.Abs(y1 - y2) < 4800)
+                Polyline ugaona_linija = new Polyline();
+                ugaona_linija.Stroke = new SolidColorBrush(Colors.Black);
+                ugaona_linija.StrokeThickness = 1.5;
+
+                for (int i = 0; i < lineBlocks.Count; i++)
                 {
-                    
-                        Polyline ugaona_linija = new Polyline();
-                        ugaona_linija.Stroke = new SolidColorBrush(Colors.Black);
-                        ugaona_linija.StrokeThickness = 1.5;
-
-                        for (int i = 0; i < lineBlocks.Count; i++)
+                    BlockType lineType = BlockType.EMPTY;
+                    //horizontalne linije
+                    if (i < lineBlocks.Count - 1) //ne smemo uporediti psolednji sa sledecim (nepostojecim)
+                    {
+                        if (lineBlocks[i].XCoo != lineBlocks[i + 1].XCoo)
                         {
-                            BlockType lineType = BlockType.EMPTY;
-                            //horizontalne linije
-                            if (i < lineBlocks.Count - 1) //ne smemo uporediti psolednji sa sledecim (nepostojecim)
-                            {
-                                if (lineBlocks[i].XCoo != lineBlocks[i + 1].XCoo)
-                                {
-                                    lineType = BlockType.HLINE;
-                                }
-                                else if (lineBlocks[i].YCoo != lineBlocks[i + 1].YCoo)
-                                {
-                                    lineType = BlockType.VLINE;
-                                }
-                                if (lineType != BlockType.EMPTY)
-                                {
-                                    drawingGrid.AddLineToGrid(lineBlocks[i].XCoo, lineBlocks[i].YCoo, lineType); //oznaci polja u gridu sa odgovarajucim tipom
-                                }
-                            }
-                            System.Windows.Point linePoint = new System.Windows.Point(lineBlocks[i].XCoo + 5, lineBlocks[i].YCoo + 5);
-                            ugaona_linija.Points.Add(linePoint);
-                            ugaona_linija.MouseRightButtonDown += SetElementColors;
-                            ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
-                            ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
-                            ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
-
-
+                            lineType = BlockType.HLINE;
                         }
-                        drawingCanvas.Children.Add(ugaona_linija);
-                    
+                        else if (lineBlocks[i].YCoo != lineBlocks[i + 1].YCoo)
+                        {
+                            lineType = BlockType.VLINE;
+                        }
+                        if (lineType != BlockType.EMPTY)
+                        {
+                            drawingGrid.AddLineToGrid(lineBlocks[i].XCoo, lineBlocks[i].YCoo, lineType); //oznaci polja u gridu sa odgovarajucim tipom
+                        }
+                    }
+                    System.Windows.Point linePoint = new System.Windows.Point(lineBlocks[i].XCoo + 5, lineBlocks[i].YCoo + 5);
+                    ugaona_linija.Points.Add(linePoint);
+                   
+
+
                 }
+                ugaona_linija.MouseRightButtonDown += SetElementColors;
+                ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
+                ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
+                ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
+                drawingCanvas.Children.Add(ugaona_linija);
+
+
+
+
 
 
 
