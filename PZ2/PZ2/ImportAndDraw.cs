@@ -270,14 +270,14 @@ namespace PZ2
                 {
                     for(int i = 0; i < 2; i++)
                     {
-                        if (IsPointUsed(closestX, closestY))
+                        if (!IsPointUsed(closestX, closestY))
                         {
                             usedPoints.Add(new Point() { X = closestX, Y = closestY });
                             return new Point() { X = closestX * 2, Y = closestY * 2 };
                         }
                         closestY = closestY + blockSize;
                     }
-                    if (IsPointUsed(closestX, closestY))
+                    if (!IsPointUsed(closestX, closestY))
                     {
                         usedPoints.Add(new Point() { X = closestX, Y = closestY });
                         return new Point() { X = closestX * 2, Y = closestY * 2 };
@@ -325,7 +325,7 @@ namespace PZ2
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
                 AllResources.Add(ent);
-                drawingCanvas.Children.Add(shape);
+                drawingCanvas.Children.Add(ent.PowerEntityShape);
                 
             }
         }
@@ -340,7 +340,7 @@ namespace PZ2
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
                 AllResources.Add(ent);
-                drawingCanvas.Children.Add(shape);
+                drawingCanvas.Children.Add(ent.PowerEntityShape);
 
             }
         }
@@ -355,7 +355,7 @@ namespace PZ2
                 Canvas.SetTop(shape, ent.Y + 2);
                 ent.PowerEntityShape = shape;
                 AllResources.Add(ent);
-                drawingCanvas.Children.Add(shape);
+                drawingCanvas.Children.Add(ent.PowerEntityShape);
 
             }
         }
@@ -414,7 +414,7 @@ namespace PZ2
                         endEntity = temp;
                     }
                 }
-                if(x1 == 0 || x2 == 0 || y1 == 0 || y2 == 0)
+                if((x1 == 0 || x2 == 0 || y1 == 0 || y2 == 0) || (x1==x2 && y1==y2))
                 {
                     continue;
                 }
@@ -456,8 +456,9 @@ namespace PZ2
 
                 }
                 ugaona_linija.MouseRightButtonDown += SetElementColors;
-                ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
                 ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
+                ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
+                
                 ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
                 drawingCanvas.Children.Add(ugaona_linija);
 
