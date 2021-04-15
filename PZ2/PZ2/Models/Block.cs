@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 
 namespace PZ2.Models
 {
-    public enum BlockType { EMPTY, NODE,SWITCH,SUBSTATION,HLINE,VLINE}
+    public enum BlockType { EMPTY, NODE,SWITCH,SUBSTATION,LINE,HLINE,VLINE,CROSS_LINE}
     class Block
     {
         private PowerEntity bObject;

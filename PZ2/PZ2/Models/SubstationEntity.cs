@@ -15,7 +15,7 @@ namespace PZ2.Models
         }
         public override void SetElementColor()
         {
-            PowerEntityShape.Fill = Brushes.Yellow;
+            PowerEntityShape.Fill = Brushes.Green;
         }
     }
 }

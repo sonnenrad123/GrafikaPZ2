@@ -12,7 +12,7 @@
             <Label x:Name="Switch" Content="Switch - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="21"/>
             <Label x:Name="Node" Content="Node - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="41"/>
             <Label x:Name="Line" Content="Line - " Canvas.Left="10" Height="23" Width="68" Canvas.Top="64"/>
-            <Ellipse Fill="Yellow" Height="11" Canvas.Left="81" Stroke="Black" Canvas.Top="11" Width="12" RenderTransformOrigin="0.5,0.5">
+            <Ellipse Fill="Green" Height="11" Canvas.Left="81" Stroke="Black" Canvas.Top="11" Width="12" RenderTransformOrigin="0.5,0.5">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -48,7 +48,7 @@
         <Slider x:Name="slider" Minimum=".1" Maximum="10" Value="1" DockPanel.Dock="Top"/>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Canvas Width="4000" Height="4000"  Name="GridCanvas">
+                <Canvas Width="5000" Height="5000"  Name="GridCanvas">
                     <Canvas.LayoutTransform>
                         <ScaleTransform ScaleX="{Binding ElementName=slider, Path=Value}"
                                 ScaleY="{Binding ElementName=slider, Path=Value}"/>
