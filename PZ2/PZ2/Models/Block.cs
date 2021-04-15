@@ -15,7 +15,7 @@ namespace PZ2.Models
         private double xCoo;
         private double yCoo;
         private BlockType bType;
-        private Brush bColor = Brushes.Green;
+        private Brush bColor = Brushes.Black;
         private Shape bShape;
         private int approx_X;
         private int approx_Y;

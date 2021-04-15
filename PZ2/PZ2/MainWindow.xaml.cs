@@ -30,6 +30,7 @@ namespace PZ2
             mainImportDraw.ScaleFromLatLonToCanvas(GridCanvas.Width,GridCanvas.Height);
             mainImportDraw.ConvertFromLatLonToCanvasCoord();
             mainImportDraw.DrawElements(this.GridCanvas,DrawingElementMouseDown);
+            
         }
 
 

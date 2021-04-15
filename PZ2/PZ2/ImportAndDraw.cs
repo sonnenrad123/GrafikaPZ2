@@ -311,6 +311,7 @@ namespace PZ2
             DrawNodes(drawingCanvas, e);
             DrawSwitches(drawingCanvas, e);
             DrawLines(drawingCanvas, e);
+            DrawCrossMarks(drawingCanvas);
         }
 
 
@@ -318,7 +319,7 @@ namespace PZ2
         {
             foreach(SubstationEntity ent in substations)
             {
-                Ellipse shape = new Ellipse() { Height = 7, Width = 7, Fill = Brushes.Green };
+                Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Green };
                 shape.ToolTip = "Substation: \n" + "ID:" + ent.Id + "\nName: " + ent.Name;
                 shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
@@ -334,7 +335,7 @@ namespace PZ2
         {
             foreach (NodeEntity ent in nodes)
             {
-                Ellipse shape = new Ellipse() { Height = 7, Width = 7, Fill = Brushes.Blue };
+                Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Blue };
                 shape.ToolTip = "Node: \n" + "ID:" + ent.Id + "\nName: " + ent.Name;
                 shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
@@ -350,7 +351,7 @@ namespace PZ2
         {
             foreach (SwitchEntity ent in switches)
             {
-                Ellipse shape = new Ellipse() { Height = 7, Width = 7, Fill = Brushes.Red };
+                Ellipse shape = new Ellipse() { Height = 6, Width = 6, Fill = Brushes.Red };
                 shape.ToolTip = "Switch: \n" + "ID:" + ent.Id + "\nName: " + ent.Name + "\nStatus: "+ent.Status;
                 shape.MouseLeftButtonDown += e;
                 Canvas.SetLeft(shape, ent.X + 2);
@@ -366,24 +367,21 @@ namespace PZ2
         {
             foreach(LineEntity ent in lines)
             {
-                bool povezuje = false;
                 PowerEntity startEntity = new PowerEntity(), endEntity = new PowerEntity();
                 double x1=0, y1=0, x2=0, y2=0;
-                Line vod = new Line() { Stroke = Brushes.Black };
+                
                 foreach(SubstationEntity temp in substations)
                 {
                     if(temp.Id == ent.FirstEnd)
                     {
                         x1 = temp.X;
                         y1 = temp.Y;
-                        povezuje = true;
                         startEntity = temp;
                     }
                     if(temp.Id == ent.SecondEnd)
                     {
                         x2 = temp.X;
                         y2 = temp.Y;
-                        povezuje = true;
                         endEntity = temp;
                     }
                 }
@@ -400,7 +398,6 @@ namespace PZ2
                     {
                         x2 = temp.X;
                         y2 = temp.Y;
-                        povezuje = true;
                         endEntity = temp;
                     }
                 }
@@ -417,36 +414,33 @@ namespace PZ2
                     {
                         x2 = temp.X;
                         y2 = temp.Y;
-                        povezuje = true;
                         endEntity = temp;
                     }
                 }
-                if (povezuje) //crtamo linije koje samo povezuju elemente
+                if(x1 == 0 || x2 == 0 || y1 == 0 || y2 == 0)
                 {
-                    vod.X1 = x1;
-                    vod.Y1 = y1;
-                    vod.X2 = x2;
-                    vod.Y2 = y2;
+                    continue;
+                }
 
+                List<Block> lineBlocks = drawingGrid.createLineUsingBFS(x1, y1, x2, y2, false); //probacemo da ne sece
 
-                    List<Block> lineBlocks = drawingGrid.createLineUsingBFS(x1, y1, x2, y2,false); //probacemo da ne sece
+                if (lineBlocks.Count < 2)//ako nisam nasao put bez presecanja ukljucujem presecanje linija
+                {
+                    lineBlocks = drawingGrid.createLineUsingBFS(x1, y1, x2, y2, true);
+                }
+
+                if(Math.Abs(x1-x2) < 4800 || Math.Abs(y1 - y2) < 4800)
+                {
                     
-                    if(lineBlocks.Count < 2)//ako nisam nasao put bez presecanja ukljucujem presecanje linija
-                    {
-                        lineBlocks = drawingGrid.createLineUsingBFS(x1, y1, x2, y2, true);
-                    }
-
-                    if(lineBlocks.Count > 2) //crtaj
-                    {
                         Polyline ugaona_linija = new Polyline();
                         ugaona_linija.Stroke = new SolidColorBrush(Colors.Black);
-                        ugaona_linija.StrokeThickness = 2;
+                        ugaona_linija.StrokeThickness = 1.5;
 
-                        for(int i = 0; i < lineBlocks.Count; i++)
+                        for (int i = 0; i < lineBlocks.Count; i++)
                         {
                             BlockType lineType = BlockType.EMPTY;
                             //horizontalne linije
-                            if(i<lineBlocks.Count - 1) //ne smemo uporediti psolednji sa sledecim (nepostojecim)
+                            if (i < lineBlocks.Count - 1) //ne smemo uporediti psolednji sa sledecim (nepostojecim)
                             {
                                 if (lineBlocks[i].XCoo != lineBlocks[i + 1].XCoo)
                                 {
@@ -456,28 +450,47 @@ namespace PZ2
                                 {
                                     lineType = BlockType.VLINE;
                                 }
-                                if(lineType != BlockType.EMPTY)
+                                if (lineType != BlockType.EMPTY)
                                 {
                                     drawingGrid.AddLineToGrid(lineBlocks[i].XCoo, lineBlocks[i].YCoo, lineType); //oznaci polja u gridu sa odgovarajucim tipom
                                 }
                             }
                             System.Windows.Point linePoint = new System.Windows.Point(lineBlocks[i].XCoo + 5, lineBlocks[i].YCoo + 5);
                             ugaona_linija.Points.Add(linePoint);
-                            
-                        }
-                        ugaona_linija.MouseRightButtonDown += SetElementColors;
-                        ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
-                        ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
-                        ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
-                        drawingCanvas.Children.Add(ugaona_linija);
-                    }
+                            ugaona_linija.MouseRightButtonDown += SetElementColors;
+                            ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
+                            ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
+                            ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
 
+
+                        }
+                        drawingCanvas.Children.Add(ugaona_linija);
+                    
                 }
 
 
 
 
+
+
             }
+        }
+
+        void DrawCrossMarks(Canvas drawingCanvas)
+        {
+            int br = 0;
+            foreach (Block block in drawingGrid.BlockMatrix)
+            {
+                if(block.BType == BlockType.CROSS_LINE)
+                {
+                    Ellipse tempEllipse = new Ellipse() { Width = 5, Height = 5, Fill = Brushes.Black };
+                    Canvas.SetLeft(tempEllipse, block.XCoo + 3);
+                    Canvas.SetTop(tempEllipse, block.YCoo + 3);
+                    drawingCanvas.Children.Add(tempEllipse);
+                    br++;
+                }
+            }
+
         }
 
 

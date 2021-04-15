@@ -43,14 +43,6 @@ namespace PZ2.Models
             Queue<Block> searchQueue = new Queue<Block>();
             bool pathFound = false;
             Block[,] visited = new Block[blockMatrix.GetLength(0), BlockMatrix.GetLength(1)];
-            
-            for(int i = 0; i < blockMatrix.GetLength(0); i++)
-            {
-                for(int j=0; j < blockMatrix.GetLength(1); j++)
-                {
-                    visited[i, j] = new Block(-2,-2,-2,-2);
-                }
-            }
 
 
             //moramo pronaci tacno x,y indekse bloka na koji smo aproksimirali tj indekse u gridu..
@@ -115,29 +107,29 @@ namespace PZ2.Models
                         continue;
                     }
 
-                    if (visited[nextRow, nextColumn].XCoo != -2 || visited[nextRow, nextColumn].YCoo != -2 || visited[nextRow, nextColumn].Approx_X != -2 || visited[nextRow, nextColumn].Approx_Y != -2) //preskoci posecena
+                    if (visited[nextRow, nextColumn] != null) //preskoci posecena
                     {
                         continue;
                     }
 
-                    if(!isLastBlock(nextRow,nextColumn,endRouteBlock) && (blockMatrix[nextRow,nextColumn].BType != BlockType.EMPTY) && cross == false)
+                    if(!(nextRow == endRouteBlock.Approx_X && nextColumn == endRouteBlock.Approx_Y) && (blockMatrix[nextRow,nextColumn].BType != BlockType.EMPTY) && cross == false)
                     {
                         continue;
                     }
                     
 
                     //ne zelimo ni linije da prolaze kroz polja sa elementima koje ne povezuju
-                    if(!isLastBlock(nextRow, nextColumn, endRouteBlock) && (blockMatrix[nextRow, nextColumn].BType == BlockType.NODE) && cross == true)
+                    if(!(nextRow == endRouteBlock.Approx_X && nextColumn == endRouteBlock.Approx_Y) && (blockMatrix[nextRow, nextColumn].BType == BlockType.NODE) && cross == true)
                     {
                         continue;
                     }
 
-                    if (!isLastBlock(nextRow, nextColumn, endRouteBlock) && (blockMatrix[nextRow, nextColumn].BType == BlockType.SWITCH) && cross == true)
+                    if (!(nextRow == endRouteBlock.Approx_X && nextColumn == endRouteBlock.Approx_Y) && (blockMatrix[nextRow, nextColumn].BType == BlockType.SWITCH) && cross == true)
                     {
                         continue;
                     }
 
-                    if (!isLastBlock(nextRow, nextColumn, endRouteBlock) && (blockMatrix[nextRow, nextColumn].BType == BlockType.SUBSTATION) && cross == true)
+                    if (!(nextRow == endRouteBlock.Approx_X && nextColumn == endRouteBlock.Approx_Y) && (blockMatrix[nextRow, nextColumn].BType == BlockType.SUBSTATION) && cross == true)
                     {
                         continue;
                     }
@@ -168,10 +160,7 @@ namespace PZ2.Models
 
         }
 
-        bool isLastBlock(int x, int y, Block lastBlock)
-        {
-            return (x == lastBlock.Approx_X && y == lastBlock.Approx_Y);
-        }
+        
 
         public void AddLineToGrid(double XC, double YC, BlockType lineType)
         {

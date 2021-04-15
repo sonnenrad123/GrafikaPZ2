@@ -83,7 +83,7 @@ namespace PZ2.Models
 
         public void OnClick(object sender,EventArgs e)
         {
-            powerEntityShape.Fill = Brushes.Goldenrod;
+            powerEntityShape.Fill = Brushes.Yellow;
         }
     }
 }
