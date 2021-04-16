@@ -43,7 +43,7 @@
                 </Ellipse.RenderTransform>
             </Ellipse>
             <Rectangle Fill="Black" Height="2" Canvas.Left="47" Stroke="Black" Width="21" Canvas.Top="78"/>
-
+            <Button x:Name="OpenFileBtn" Content="Load Xml" Canvas.Left="117" Canvas.Top="60" Width="75" Click="OpenFileBtn_Click"/>
         </Canvas>
         <Slider x:Name="slider" Minimum=".1" Maximum="10" Value="1" DockPanel.Dock="Top"/>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

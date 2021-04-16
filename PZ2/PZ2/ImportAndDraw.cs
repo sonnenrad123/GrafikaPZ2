@@ -32,10 +32,10 @@ namespace PZ2
            AllResources = new List<PowerEntity>();
         }
 
-        public void LoadAndParseXML()
+        public void LoadAndParseXML(string location)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load("Geographic.xml");
+            xmlDoc.Load(location);
             XmlNodeList lineNodes = xmlDoc.SelectNodes("/NetworkModel/Lines/LineEntity");
             XmlNodeList substationNodes = xmlDoc.SelectNodes("/NetworkModel/Substations/SubstationEntity");
             XmlNodeList switchNodes = xmlDoc.SelectNodes("/NetworkModel/Switches/SwitchEntity");
@@ -362,6 +362,9 @@ namespace PZ2
 
         public void DrawLines(Canvas drawingCanvas)
         {
+           
+            
+
             foreach(LineEntity ent in lines)
             {
                 PowerEntity startEntity = new PowerEntity(), endEntity = new PowerEntity();
