@@ -362,61 +362,15 @@ namespace PZ2
 
         public void DrawLines(Canvas drawingCanvas)
         {
-           
-            
+            List<Tuple<double, double, double, double, PowerEntity, PowerEntity, LineEntity>> connectedCoords = findAndSortConnectedCoords();//zbog ubrzanja, kreni od najblizih tacaka pa nadalje <<X1,Y1,X2,Y2,startEnt,endEnt,Line>>
 
-            foreach(LineEntity ent in lines)
+
+            foreach (Tuple<double, double, double, double,PowerEntity,PowerEntity, LineEntity> ent in connectedCoords)
             {
-                PowerEntity startEntity = new PowerEntity(), endEntity = new PowerEntity();
-                double x1=0, y1=0, x2=0, y2=0;
+                PowerEntity startEntity = ent.Item5, endEntity = ent.Item6;
+                double x1=ent.Item1, y1=ent.Item2, x2=ent.Item3, y2=ent.Item4;
+                LineEntity conline = ent.Item7;
                 
-                foreach(SubstationEntity temp in substations)
-                {
-                    if(temp.Id == ent.FirstEnd)
-                    {
-                        x1 = temp.X;
-                        y1 = temp.Y;
-                        startEntity = temp;
-                    }
-                    if(temp.Id == ent.SecondEnd)
-                    {
-                        x2 = temp.X;
-                        y2 = temp.Y;
-                        endEntity = temp;
-                    }
-                }
-
-                foreach(NodeEntity temp in nodes)
-                {
-                    if (temp.Id == ent.FirstEnd)
-                    {
-                        x1 = temp.X;
-                        y1 = temp.Y;
-                        startEntity = temp;
-                    }
-                    if (temp.Id == ent.SecondEnd)
-                    {
-                        x2 = temp.X;
-                        y2 = temp.Y;
-                        endEntity = temp;
-                    }
-                }
-
-                foreach(SwitchEntity temp in switches)
-                {
-                    if (temp.Id == ent.FirstEnd)
-                    {
-                        x1 = temp.X;
-                        y1 = temp.Y;
-                        startEntity = temp;
-                    }
-                    if (temp.Id == ent.SecondEnd)
-                    {
-                        x2 = temp.X;
-                        y2 = temp.Y;
-                        endEntity = temp;
-                    }
-                }
                 if((x1 == 0 || x2 == 0 || y1 == 0 || y2 == 0) || (x1==x2 && y1==y2))
                 {
                     continue;
@@ -462,7 +416,7 @@ namespace PZ2
                 ugaona_linija.MouseRightButtonDown += endEntity.OnClick;
                 ugaona_linija.MouseRightButtonDown += startEntity.OnClick;
                 
-                ugaona_linija.ToolTip = "Power line\n" + "ID: " + ent.Id + "\nName: " + ent.Name + "\nTyle: " + ent.LineType + "\nConductor material: " + ent.ConductorMaterial + "\nUnderground: " + ent.IsUnderground.ToString();
+                ugaona_linija.ToolTip = "Power line\n" + "ID: " + conline.Id + "\nName: " + conline.Name + "\nTyle: " + conline.LineType + "\nConductor material: " + conline.ConductorMaterial + "\nUnderground: " + conline.IsUnderground.ToString();
                 drawingCanvas.Children.Add(ugaona_linija);
 
 
@@ -476,6 +430,73 @@ namespace PZ2
 
             }
         }
+
+
+        List<Tuple<double,double,double,double, PowerEntity, PowerEntity, LineEntity>> findAndSortConnectedCoords()
+        {
+            List<Tuple<double, double, double, double, PowerEntity, PowerEntity, LineEntity>> ret = new List<Tuple<double, double, double, double, PowerEntity, PowerEntity, LineEntity>>();
+            foreach (LineEntity ent in lines)
+            {
+                PowerEntity startEntity = new PowerEntity(), endEntity = new PowerEntity();
+                double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+
+                foreach (SubstationEntity temp in substations)
+                {
+                    if (temp.Id == ent.FirstEnd)
+                    {
+                        x1 = temp.X;
+                        y1 = temp.Y;
+                        startEntity = temp;
+                    }
+                    if (temp.Id == ent.SecondEnd)
+                    {
+                        x2 = temp.X;
+                        y2 = temp.Y;
+                        endEntity = temp;
+                    }
+                }
+
+                foreach (NodeEntity temp in nodes)
+                {
+                    if (temp.Id == ent.FirstEnd)
+                    {
+                        x1 = temp.X;
+                        y1 = temp.Y;
+                        startEntity = temp;
+                    }
+                    if (temp.Id == ent.SecondEnd)
+                    {
+                        x2 = temp.X;
+                        y2 = temp.Y;
+                        endEntity = temp;
+                    }
+                }
+
+                foreach (SwitchEntity temp in switches)
+                {
+                    if (temp.Id == ent.FirstEnd)
+                    {
+                        x1 = temp.X;
+                        y1 = temp.Y;
+                        startEntity = temp;
+                    }
+                    if (temp.Id == ent.SecondEnd)
+                    {
+                        x2 = temp.X;
+                        y2 = temp.Y;
+                        endEntity = temp;
+                    }
+                }
+                Tuple<double, double, double, double, PowerEntity, PowerEntity, LineEntity> oneLineTuple = new Tuple<double, double, double, double, PowerEntity, PowerEntity, LineEntity>(x1, y1, x2, y2, startEntity, endEntity, ent);
+                ret.Add(oneLineTuple);
+            }
+            var result = ret.OrderBy(tup => ((tup.Item1 - tup.Item3) * (tup.Item1 - tup.Item3) + (tup.Item2 - tup.Item4) * (tup.Item2 - tup.Item4))).ToList();
+
+
+            return result;
+        }
+
+       
 
         void DrawCrossMarks(Canvas drawingCanvas)
         {
