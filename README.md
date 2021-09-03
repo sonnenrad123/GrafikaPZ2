@@ -1,0 +1,1 @@
+WPF application that shows electricity network of Novi Sad in 2D.
